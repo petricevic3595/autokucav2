@@ -12,3 +12,15 @@ typedef struct {
     int godinaProizvodnje;
     int kilometraza;
 } BMW;
+
+typedef enum {
+    DODAJ_BMW = 1,
+    ISPISI_BMW,
+    UREDI_BMW,
+    OBRISI_BMW,
+    SORTIRAJ_CIJENA_PADAJUCE,
+    SORTIRAJ_CIJENA_RASTUCE,
+    SORTIRAJ_SNAZI_RASTUCE,
+    SORTIRAJ_SNAZI_OPADAJUCE,
+    IZADJI
+} IzbornikOpcija;

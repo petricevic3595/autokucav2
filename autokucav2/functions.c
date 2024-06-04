@@ -462,11 +462,6 @@ int izlazIzPrograma(BMW* nizPodataka) {
             else if (strcmp("ne", potvrda) == 0) {
                 return 1;
             }
-            else {
-                printf("Neispravan unos. Molimo upisite \"da\" ili \"ne\".\n");
-                // Čišćenje ulaznog međuspremnika
-                while (getchar() != '\n');
-            }
         }
         else {
             printf("Neispravan unos. Molimo upisite \"da\" ili \"ne\".\n");
@@ -476,5 +471,4 @@ int izlazIzPrograma(BMW* nizPodataka) {
     }
     free(nizPodataka);
     nizPodataka = NULL;
-    return 0; // Dodano kako bi se izbjeglo upozorenje kompajlera o nedostatku return vrijednosti
 }
