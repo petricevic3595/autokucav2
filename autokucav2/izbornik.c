@@ -142,6 +142,7 @@ int izbornik(const char* imeDatoteke) {
         printf("7. Sortiraj BMW-ove po snazi (uzlazno)\n");
         printf("8. Sortiraj BMW-ove po snazi (silazno)\n");
         printf("9. Izadji iz programa\n");
+
         printf("Odabir: ");
 
         if (scanf("%d", &izbor) != 1) {

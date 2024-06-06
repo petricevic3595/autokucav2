@@ -199,7 +199,7 @@ void urediBMW(const char* const imeDatoteke) {
         exit(EXIT_FAILURE);
     }
 
-    fseek(pF, sizeof(int), SEEK_SET); // Skip the number of BMWs
+    fseek(pF, sizeof(int), SEEK_SET); 
 
     int urediBMW;
     printf("Unesite ID BMW-a koji zelite urediti: ");
@@ -209,12 +209,12 @@ void urediBMW(const char* const imeDatoteke) {
         return;
     }
 
-    // Find the index of the BMW with the specified ID
+   
     int pronadeniIndex = -1;
     BMW temp;
     while (fread(&temp, sizeof(BMW), 1, pF) == 1) {
         if (temp.id == urediBMW) {
-            pronadeniIndex = ftell(pF) / sizeof(BMW) - 1; // Calculate the index
+            pronadeniIndex = ftell(pF) / sizeof(BMW) - 1; 
             break;
         }
     }
@@ -241,40 +241,40 @@ void urediBMW(const char* const imeDatoteke) {
     printf("Unesite novu cijenu:\n");
     if (scanf("%f", &temp.cijena) != 1) {
         printf("Neispravan unos. Cijena nece biti promijenjena.\n");
-        while (getchar() != '\n'); // Clear input buffer
+        while (getchar() != '\n'); 
     }
 
     printf("Unesite novu potrosnju (litara na 100km):\n");
     if (scanf("%f", &temp.potrosnja) != 1) {
         printf("Neispravan unos. Potrosnja nece biti promijenjena.\n");
-        while (getchar() != '\n'); // Clear input buffer
+        while (getchar() != '\n'); 
     }
 
     printf("Unesite novo ubrzanje (0-100km/h):\n");
     if (scanf("%f", &temp.ubrzanje) != 1) {
         printf("Neispravan unos. Ubrzanje nece biti promijenjeno.\n");
-        while (getchar() != '\n'); // Clear input buffer
+        while (getchar() != '\n'); 
     }
 
     printf("Unesite novu snagu (HP):\n");
     if (scanf("%d", &temp.snaga) != 1) {
         printf("Neispravan unos. Snaga nece biti promijenjena.\n");
-        while (getchar() != '\n'); // Clear input buffer
+        while (getchar() != '\n'); 
     }
 
     printf("Unesite novu godinu proizvodnje:\n");
     if (scanf("%d", &temp.godinaProizvodnje) != 1) {
         printf("Neispravan unos. Godina proizvodnje nece biti promijenjena.\n");
-        while (getchar() != '\n'); // Clear input buffer
+        while (getchar() != '\n'); 
     }
 
     printf("Unesite novu kilometrazu:\n");
     if (scanf("%d", &temp.kilometraza) != 1) {
         printf("Neispravan unos. Kilometraza nece biti promijenjena.\n");
-        while (getchar() != '\n'); // Clear input buffer
+        while (getchar() != '\n'); 
     }
 
-    // Write the updated BMW record back to the file
+    
     fseek(pF, sizeof(int) + pronadeniIndex * sizeof(BMW), SEEK_SET);
     fwrite(&temp, sizeof(BMW), 1, pF);
 
@@ -289,7 +289,7 @@ void obrisiBMW(const char* const imeDatoteke) {
         exit(EXIT_FAILURE);
     }
 
-    fseek(pF, sizeof(int), SEEK_SET); // Skip the number of BMWs
+    fseek(pF, sizeof(int), SEEK_SET); 
 
     int obrisiBMW;
     printf("Unesite ID BMW-a koji zelite obrisati: ");
@@ -299,12 +299,12 @@ void obrisiBMW(const char* const imeDatoteke) {
         return;
     }
 
-    // Find the index of the BMW with the specified ID
+    
     int pronadeniIndex = -1;
     BMW temp;
     while (fread(&temp, sizeof(BMW), 1, pF) == 1) {
         if (temp.id == obrisiBMW) {
-            pronadeniIndex = ftell(pF) / sizeof(BMW) - 1; // Calculate the index
+            pronadeniIndex = ftell(pF) / sizeof(BMW) - 1; 
             break;
         }
     }
@@ -326,18 +326,18 @@ void obrisiBMW(const char* const imeDatoteke) {
         fclose(pF);
         return;
     }
-    // Move the file pointer to the last BMW record
+    
     fseek(pF, -(long)sizeof(BMW), SEEK_END);
 
-    // Read the last BMW record
+    
     BMW lastBMW;
     fread(&lastBMW, sizeof(BMW), 1, pF);
 
-    // Overwrite the BMW to be deleted with the last BMW in the file
+   
     fseek(pF, sizeof(int) + pronadeniIndex * sizeof(BMW), SEEK_SET);
     fwrite(&lastBMW, sizeof(BMW), 1, pF);
 
-    // Decrease the total number of BMWs
+    
     fseek(pF, 0, SEEK_SET);
     int brojBMW;
     fread(&brojBMW, sizeof(int), 1, pF);
@@ -384,10 +384,10 @@ int usporedbaUzlazno(const void* a, const void* b) {
 }
 
 void sortirajBMWpoCijeniRastuce(BMW* nizPodataka, int brojBMW) {
-    // Sort the array using qsort
+    
     qsort(nizPodataka, brojBMW, sizeof(BMW), usporedbaUzlazno);
 
-    // Print sorted BMW automobiles
+    
     printf("BMW sortirannje od najnize do najvise cijene:\n");
     for (int i = 0; i < brojBMW; i++) {
         printf("BMW automobile %d:\n", nizPodataka[i].id);
@@ -410,10 +410,10 @@ int snagaUzlazno(const void* a, const void* b) {
 }
 
 void sortirajBMWpoSnaziRastuce(BMW* nizPodataka, int brojBMW) {
-    // Sort the array using qsort
+    
     qsort(nizPodataka, brojBMW, sizeof(BMW), snagaUzlazno);
 
-    // Print sorted BMW automobiles
+    
     printf("BMW automobili sortirani po snazi (Uzlazno):\n");
     for (int i = 0; i < brojBMW; i++) {
         printf("BMW automobil %d:\n", nizPodataka[i].id);
@@ -465,10 +465,41 @@ int izlazIzPrograma(BMW* nizPodataka) {
         }
         else {
             printf("Neispravan unos. Molimo upisite \"da\" ili \"ne\".\n");
-            // Čišćenje ulaznog međuspremnika
+            
             while (getchar() != '\n');
         }
     }
     free(nizPodataka);
     nizPodataka = NULL;
 }
+
+/*void rename_file(const char* imeDatoteke) {
+    char new_name[FILLEN];
+
+    // Traži od korisnika da unese novo ime datoteke
+    printf("Unesite novo ime datoteke: ");
+    if (fgets(new_name, FILLEN, stdin) == NULL) {
+        fprintf(stderr, "Greška pri čitanju novog imena datoteke.\n");
+        return;
+    }
+
+    // Ukloni novi red (newline) znak na kraju unosa ako postoji
+    size_t len = strlen(new_name);
+    if (len > 0 && new_name[len - 1] == '\n') {
+        new_name[len - 1] = '\0';
+    }
+
+    // Provjeri je li novo ime predugačko
+    if (strlen(new_name) >= FILLEN) {
+        fprintf(stderr, "Greška: novo ime datoteke je predugačko.\n");
+        return;
+    }
+
+    // Pokušaj promjene naziva datoteke
+    if (rename(imeDatoteke, new_name) != 0) {
+        perror("Greška pri preimenovanju datoteke");
+        return;
+    }
+
+    printf("Datoteka je uspješno preimenovana.\n");
+}*/

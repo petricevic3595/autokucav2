@@ -1,6 +1,8 @@
 #pragma once
 
 #define MODLEN 50
+#define FILLEN 14
+
 
 typedef struct {
     char model[MODLEN];
