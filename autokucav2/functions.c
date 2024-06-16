@@ -6,7 +6,7 @@
 #include "functions.h"
 #include "podatci.h"
 
-#define PROVJERA 100
+#define PROVJERA 3
 
 int brojBMW = 0;
 
@@ -59,9 +59,10 @@ void unosBMW(const char* const fileName, const BMW* nizPodataka) {
     BMW temp;
     temp.id = brojBMW;
     printf("Unesite model (do 30 znakova):\n");
-    char model[PROVJERA];
+    //pitaj matiju za zauzimanje ako treba ovdje
+    char model[MODLEN];
     scanf(" %30[^\n]", model);
-    if (strlen(model) <= 30) {
+    if (strlen(model) <= MODLEN) {
         strcpy(temp.model, model);
         printf("Model unesen: %s\n", temp.model);
     }
@@ -358,10 +359,10 @@ int usporedbaSilazno(const void* a, const void* b) {
 }
 
 void sortirajBMWpoCijeniPadajuce(BMW* nizPodataka, int brojBMW) {
-    // Sort BMWs by price from highest to lowest
+
     qsort(nizPodataka, brojBMW, sizeof(BMW), usporedbaSilazno);
 
-    // Print sorted BMWs
+  
     printf("Sortirani BMW automobili po cijeni (od najvise do najnize):\n");
     for (int i = 0; i < brojBMW; i++) {
         printf("BMW automobil %d:\n", nizPodataka[i].id);
@@ -473,33 +474,14 @@ int izlazIzPrograma(BMW* nizPodataka) {
     nizPodataka = NULL;
 }
 
-/*void rename_file(const char* imeDatoteke) {
-    char new_name[FILLEN];
-
-    // Traži od korisnika da unese novo ime datoteke
-    printf("Unesite novo ime datoteke: ");
-    if (fgets(new_name, FILLEN, stdin) == NULL) {
-        fprintf(stderr, "Greška pri čitanju novog imena datoteke.\n");
-        return;
+void brisanjeDatoteke(const char* imeDatoteke) {
+    printf("Zelite li uistinu obrisati datoteku %s?\n", imeDatoteke);
+    printf("Utipkajte \"da\" ako uistinu želite obrisati datoteku u suprotno utipkajte\
+\"ne\"!\n");
+    char potvrda[PROVJERA] = { '\0' };
+    scanf("%2s", potvrda);
+    if (!strcmp("da", potvrda)) {
+        remove(imeDatoteke) == 0 ? printf("Uspjesno obrisana datoteka %s!\n",
+            imeDatoteke) : printf("Neuspjesno brisanje datoteke %s!\n", imeDatoteke);
     }
-
-    // Ukloni novi red (newline) znak na kraju unosa ako postoji
-    size_t len = strlen(new_name);
-    if (len > 0 && new_name[len - 1] == '\n') {
-        new_name[len - 1] = '\0';
-    }
-
-    // Provjeri je li novo ime predugačko
-    if (strlen(new_name) >= FILLEN) {
-        fprintf(stderr, "Greška: novo ime datoteke je predugačko.\n");
-        return;
-    }
-
-    // Pokušaj promjene naziva datoteke
-    if (rename(imeDatoteke, new_name) != 0) {
-        perror("Greška pri preimenovanju datoteke");
-        return;
-    }
-
-    printf("Datoteka je uspješno preimenovana.\n");
-}*/
+}

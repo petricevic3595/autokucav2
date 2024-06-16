@@ -20,4 +20,4 @@ void sortirajBMWpoSnaziOpadajuce(BMW* nizPodataka, int brojBMW);
 int snagaSilazno(const void* a, const void* b);
 void sortirajBMWpoSnaziRastuce(BMW* nizPodataka, int brojBMW);
 int snagaUzlazno(const void* a, const void* b);
-void rename_file(const char* imeDatoteke);
+void brisanjeDatoteke(const char* imeDatoteke);
