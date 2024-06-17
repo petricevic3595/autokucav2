@@ -328,23 +328,23 @@ void obrisiBMW(const char* const imeDatoteke) {
         return;
     }
 
-    fseek(pF, -(long)sizeof(BMW), SEEK_END);
+    fseek(pF, -(long)sizeof(BMW), SEEK_END);    // postavlja pokazivac na kraj datoteke 
 
 
-    BMW lastBMW;
-    fread(&lastBMW, sizeof(BMW), 1, pF);
+    BMW lastBMW;    // pravi se nova privremena struktura
+    fread(&lastBMW, sizeof(BMW), 1, pF);    // procitaju se sva vozila osim ovog obrisanog
 
 
-    fseek(pF, sizeof(int) + pronadeniIndex * sizeof(BMW), SEEK_SET);
-    fwrite(&lastBMW, sizeof(BMW), 1, pF);
+    fseek(pF, sizeof(int) + pronadeniIndex * sizeof(BMW), SEEK_SET);    // trazi indeks vozila kojeg brisemo   
+    fwrite(&lastBMW, sizeof(BMW), 1, pF);       // zapisuje sva vozila osim obrisanog
 
 
-    fseek(pF, 0, SEEK_SET);
-    int brojBMW;
-    fread(&brojBMW, sizeof(int), 1, pF);
-    brojBMW--;
-    fseek(pF, 0, SEEK_SET);
-    fwrite(&brojBMW, sizeof(int), 1, pF);
+    fseek(pF, 0, SEEK_SET);     // postavljanje pokazivaca na pocetak
+    int brojBMW; // privremena varijabla za novi brojac
+    fread(&brojBMW, sizeof(int), 1, pF);    // procita trenutni broj vozila
+    brojBMW--;  
+    fseek(pF, 0, SEEK_SET); // vracanje pokazivaca na pocetak
+    fwrite(&brojBMW, sizeof(int), 1, pF);   // upisuje broj vozila umanjen za jedan
 
     fclose(pF);
     printf("BMW s ID-om %d uspjesno obrisan!\n", obrisiBMW);
@@ -360,7 +360,7 @@ int usporedbaSilazno(const void* a, const void* b) {
 
 void sortirajBMWpoCijeniPadajuce(BMW* nizPodataka, int brojBMW) {
 
-    qsort(nizPodataka, brojBMW, sizeof(BMW), usporedbaSilazno);
+    qsort(nizPodataka, brojBMW, sizeof(BMW), usporedbaSilazno);     //rekurzija pozivanjem druge funkcije u qsort
 
 
     printf("Sortirani BMW automobili po cijeni (od najvise do najnize):\n");
@@ -386,7 +386,7 @@ int usporedbaUzlazno(const void* a, const void* b) {
 
 void sortirajBMWpoCijeniRastuce(BMW* nizPodataka, int brojBMW) {
 
-    qsort(nizPodataka, brojBMW, sizeof(BMW), usporedbaUzlazno);
+    qsort(nizPodataka, brojBMW, sizeof(BMW), usporedbaUzlazno);     // rekurzija pozivanjem druge funkcije u qsort
 
 
     printf("BMW sortirannje od najnize do najvise cijene:\n");
@@ -459,16 +459,16 @@ int izlazIzPrograma(BMW* nizPodataka) {
         if (fgets(potvrda, sizeof(potvrda), stdin)) {
 
             size_t len = strlen(potvrda);
-            if (len > 0 && potvrda[len - 1] == '\n') {
+            if (len > 0 && potvrda[len - 1] == '\n') {      // ako je nesto uneseno u len i potvrdjen unos s enterom
                 potvrda[len - 1] = '\0';
             }
 
-            if (strcmp("da", potvrda) == 0) {
+            if (strcmp("da", potvrda) == 0) {       // usporedba sa da
                 free(nizPodataka);
                 nizPodataka = NULL;
                 return 0;
             }
-            else if (strcmp("ne", potvrda) == 0) {
+            else if (strcmp("ne", potvrda) == 0) {      // usporedba sa ne
                 return 1;
             }
             else {
