@@ -12,7 +12,7 @@ static bool adminLogin() {
 
     printf("Admin Login\n");
     printf("Password: ");
-    scanf("%19s", password);
+    scanf("%19s", password);            // trazi verifikaciju korisnika pomocu lozinke 
 
     if (strcmp(password, "admin123") == 0) {
         printf("Uspjesno logiranje\n");
@@ -30,15 +30,15 @@ int izbornik(const char* imeDatoteke) {
     BMW* pModel = NULL;
     int izbor;
 
-    /*nizPodataka = ispisBMW(imeDatoteke);
+    nizPodataka = ispisBMW(imeDatoteke);
     if (nizPodataka == NULL) {
         printf("Error: Unable to read BMW data from file.\n");
         return -1;
-    }*/
+    }
 
     brojBMW = getBrojBMW(imeDatoteke);
     if (brojBMW < 0) {
-        printf("Error: Invalid number of BMWs.\n");
+        printf("Error: Invalid number of BMWs.\n");      // dohvacanje trenutno pohranjenih vozila
         return -1;
     }
 
@@ -58,67 +58,109 @@ int izbornik(const char* imeDatoteke) {
 
         printf("Odabir: ");
 
-        if (scanf("%d", &izbor) != 1) {
+        if (scanf("%d", &izbor) != 1) {     // petlja provjerava da je korisnicki unos tipa int
             printf("Krivi odabir!\n");
             while (getchar() != '\n');
-            continue;
+            continue;                       // continue nas vraca na pocetak unosa izbora za izbornik
         }
 
-        IzbornikOpcija opcija = (IzbornikOpcija)izbor;
-
-        if (opcija == DODAJ_BMW) {
-            if (adminLogin()) {
+        IzbornikOpcija opcija = (IzbornikOpcija)izbor;      // castovanje izbora u enum IzbornikOpcija
+        switch (opcija) {
+        case DODAJ_BMW:
+            if (nizPodataka != NULL && adminLogin()) {
                 unosBMW(imeDatoteke, nizPodataka);
             }
-        }
-        else if (opcija == ISPISI_BMW) {
-            ispisBMW(imeDatoteke);
-        }
-        else if (opcija == UREDI_BMW) {
-            if (adminLogin()) {
+            else {
+                printf("Neuspjela prijava ili BMW polje nije inicijalizirano.\n");
+            }
+            break;
+
+        case ISPISI_BMW:
+            if (nizPodataka != NULL && brojBMW > 0) {
+                ispisBMW(imeDatoteke);
+            }
+            else {
+                printf("BMW polje nije inicijalizirano ili ne sadrzi elemente.\n");
+            }
+            break;
+
+        case UREDI_BMW:
+            if (nizPodataka != NULL && brojBMW > 0 && adminLogin()) {
                 urediBMW(imeDatoteke);
             }
-        }
-        else if (opcija == OBRISI_BMW) {
-            if (adminLogin()) {
+            else {
+                printf("Neuspjela prijava ili BMW polje nije inicijalizirano ili ne sadrzi elemente.\n");
+            }
+            break;
+
+        case OBRISI_BMW:
+            if (nizPodataka != NULL && brojBMW > 0 && adminLogin()) {
                 obrisiBMW(imeDatoteke);
             }
-        }
-        else if (opcija ==OBRISI_DAT) {
+            else {
+                printf("Neuspjela prijava ili BMW polje nije inicijalizirano ili ne sadrzi elemente.\n");
+            }
+            break;
+
+        case OBRISI_DAT:
             if (adminLogin()) {
                 brisanjeDatoteke(imeDatoteke);
             }
-        }
-        else if (opcija == SORTIRAJ_CIJENA_PADAJUCE) {
+            else {
+                printf("Neuspjela prijava.\n");
+            }
+            break;
+        case SORTIRAJ_CIJENA_PADAJUCE:
             if (nizPodataka != NULL && brojBMW > 0) {
                 sortirajBMWpoCijeniPadajuce(nizPodataka, brojBMW);
             }
             else {
-                printf("BMW array is not initialized or contains zero elements.\n");
+                printf("BMW polje nije inicijalizirano ili ne sadrzi elemente.\n");
             }
-        }
-        else if (opcija == SORTIRAJ_CIJENA_RASTUCE) {
-            sortirajBMWpoCijeniRastuce(nizPodataka, brojBMW);
-        }
-        else if (opcija == SORTIRAJ_SNAZI_RASTUCE) {
-            sortirajBMWpoSnaziRastuce(nizPodataka, brojBMW);
-        }
-        else if (opcija == SORTIRAJ_SNAZI_OPADAJUCE) {
-            sortirajBMWpoSnaziOpadajuce(nizPodataka, brojBMW);
-        }
-        else if (opcija == IZADJI) {
-            opcija = izlazIzPrograma(nizPodataka);
-            if (opcija == 0)
+            break;
+
+        case SORTIRAJ_CIJENA_RASTUCE:
+            if (nizPodataka != NULL && brojBMW > 0) {
+                sortirajBMWpoCijeniRastuce(nizPodataka, brojBMW);
+            }
+            else {
+                printf("BMW polje nije inicijalizirano ili ne sadrzi elemente.\n");
+            }
+            break;
+
+        case SORTIRAJ_SNAZI_RASTUCE:
+            if (nizPodataka != NULL && brojBMW > 0) {
+                sortirajBMWpoSnaziRastuce(nizPodataka, brojBMW);
+            }
+            else {
+                printf("BMW polje nije inicijalizirano ili ne sadrzi elemente.\n");
+            }
+            break;
+
+        case SORTIRAJ_SNAZI_OPADAJUCE:
+            if (nizPodataka != NULL && brojBMW > 0) {
+                sortirajBMWpoSnaziOpadajuce(nizPodataka, brojBMW);
+            }
+            else {
+                printf("BMW polje nije inicijalizirano ili ne sadrzi elemente.\n");
+            }
+            break;
+
+        case IZADJI:
+            if (izlazIzPrograma(nizPodataka) == 0) {
                 return 0;
-        }
-        else {
+            }
+            break;
+
+        default:
             printf("Nepostojeci izbor.\n");
+            break;
         }
 
         system("pause");
     }
 
-    free(nizPodataka);
+    free(nizPodataka);                  //oslobadjanje memorije i vracanje pokazivaca na NULL vrijednost
     nizPodataka = NULL;
 
     return izbor;

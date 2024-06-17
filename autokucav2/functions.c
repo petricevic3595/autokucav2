@@ -6,7 +6,7 @@
 #include "functions.h"
 #include "podatci.h"
 
-#define PROVJERA 3
+#define PROVJERA 3  
 
 int brojBMW = 0;
 
@@ -16,11 +16,11 @@ void kreirajDatoteku(const char* imeDatoteke) {
         printf("Datoteka %s ne postoji. Kreiranje datoteke...\n", imeDatoteke);
         datoteka = fopen(imeDatoteke, "wb");
         if (datoteka == NULL) {
-            perror("Greska prilikom kreiranja datoteke");
+            perror("Greska prilikom kreiranja datoteke");           //zastita prilikom otvaranja datoteke
             exit(EXIT_FAILURE);
         }
-        int tmp = 0;
-        fwrite(&tmp, sizeof(int), 1, datoteka);
+        int tmp = 0;                                        // deklariranje pomocne varijable za pocetak brojanja
+        fwrite(&tmp, sizeof(int), 1, datoteka);             // postavljanje broja bmwova na nulu 
         fclose(datoteka);
         printf("Datoteka %s uspjesno kreirana!\n\n", imeDatoteke);
     }
@@ -38,7 +38,7 @@ int getBrojBMW(const char* const imeDatoteke) {
     }
 
     int numBMW;
-    fread(&numBMW, sizeof(int), 1, pF);
+    fread(&numBMW, sizeof(int), 1, pF);     // provjerava koliko bmw vozila ima zapisanih u datoteci
     fclose(pF);
 
     return numBMW;
@@ -56,13 +56,13 @@ void unosBMW(const char* const fileName, const BMW* nizPodataka) {
     }
     printf("Broj dodanih BMW-ova: %d\n\n", brojBMW);
 
-    BMW temp;
-    temp.id = brojBMW;
+    BMW temp;               // inicijalizacija privremene varijable za unos BMW vozila
+    temp.id = brojBMW;      // privremeni id uzima brojBMW koji se nakon svakog unosa uvecava
     printf("Unesite model (do 30 znakova):\n");
     //pitaj matiju za zauzimanje ako treba ovdje
     char model[MODLEN];
     scanf(" %30[^\n]", model);
-    if (strlen(model) <= MODLEN) {
+    if (strlen(model) <= MODLEN) {          // ako model ima vise znakova od dopustenog unos ce se ponovit
         strcpy(temp.model, model);
         printf("Model unesen: %s\n", temp.model);
     }
@@ -72,10 +72,10 @@ void unosBMW(const char* const fileName, const BMW* nizPodataka) {
     }
 
     getchar();
-    while (!validInput) {
+    while (!validInput) {           // petlja se izvrsava dok unos ne bude ispravan
         printf("Cijena:\n ");
         if (scanf("%f", &temp.cijena) == 1) {
-            validInput = true;
+            validInput = true;          // ako je unos ispravan varijable se mijenja na true i zavrsava petlja
         }
         else {
             printf("Netocan unos!\n");
@@ -83,7 +83,7 @@ void unosBMW(const char* const fileName, const BMW* nizPodataka) {
         }
     }
 
-    validInput = false;
+    validInput = false;         // ponovno postavljanje varijable na false kako bi iznova mogli provjeriti uvjet
     while (!validInput) {
         printf("Potrosnja (litara na 100km):\n ");
         if (scanf("%f", &temp.potrosnja) == 1) {
@@ -143,12 +143,12 @@ void unosBMW(const char* const fileName, const BMW* nizPodataka) {
         }
     }
 
-    fread(&brojBMW, sizeof(int), 1, pF);
-    fseek(pF, sizeof(BMW) * brojBMW, SEEK_CUR);
-    fwrite(&temp, sizeof(BMW), 1, pF);
-    rewind(pF);
+    fread(&brojBMW, sizeof(int), 1, pF);           // citanje broja zapisanih bmw vozila u datoteci 
+    fseek(pF, sizeof(BMW) * brojBMW, SEEK_CUR);     // pomicanje pokazivaca na kraj datoteke    
+    fwrite(&temp, sizeof(BMW), 1, pF);              // zapis o novom bmw vozilu
+    rewind(pF);                                     // vracanje pokazivaca na pocetak
     brojBMW++;
-    fwrite(&brojBMW, sizeof(int), 1, pF);
+    fwrite(&brojBMW, sizeof(int), 1, pF);              // zapisuje novi broj bmw vozila nakon sto je varijabla uvecana
     fclose(pF);
     printf("\n");
     printf("BMW uspjesno dodan!\n\n");
@@ -158,26 +158,26 @@ BMW* ispisBMW(const char* const imeDatoteke) {
     printf("Ucitavanje podataka...\n\n");
     FILE* pF = fopen(imeDatoteke, "rb+");
     if (pF == NULL) {
-        perror("Ucitavanje podataka iz datoteke");
+        perror("Ucitavanje podataka iz datoteke");          // zastita parametara
         return NULL;
     }
 
-    fread(&brojBMW, sizeof(int), 1, pF);
+    fread(&brojBMW, sizeof(int), 1, pF);        // citanje koliko ima pohranjenih bmw vozila
     printf("Broj BMW automobila: %d\n\n", brojBMW);
-    BMW* nizBMW = (BMW*)calloc(brojBMW, sizeof(BMW));
+    BMW* nizBMW = (BMW*)calloc(brojBMW, sizeof(BMW));       // alociranje memorije za kasniji ispis pohranjenih vozila
     if (nizBMW == NULL) {
         perror("Alokacija memorije za BMW automobile");
         return NULL;
     }
 
-    fread(nizBMW, sizeof(BMW), brojBMW, pF);
+    fread(nizBMW, sizeof(BMW), brojBMW, pF);    // citanje podataka o bmw vozilima i pohrana u nizBMW
     if (nizBMW == NULL) {
         printf("Polje BMW automobila je prazno!\n");
         return NULL;
     }
 
     int i;
-    for (i = 0; i < brojBMW; i++) {
+    for (i = 0; i < brojBMW; i++) {     // ispis svih pohranjenih vozila
         printf("BMW automobil %d:\n", i + 1);
         printf("ID: %d\n", nizBMW[i].id);
         printf("Model: %s\n", nizBMW[i].model);
@@ -200,33 +200,33 @@ void urediBMW(const char* const imeDatoteke) {
         exit(EXIT_FAILURE);
     }
 
-    fseek(pF, sizeof(int), SEEK_SET); 
+    fseek(pF, sizeof(int), SEEK_SET);       // postavljanje pokazivaca na pocetak datoteke
 
     int urediBMW;
-    printf("Unesite ID BMW-a koji zelite urediti: ");
-    if (scanf("%d", &urediBMW) != 1) {
+    printf("Unesite ID BMW-a koji zelite urediti: ");       // urediBMW pohranjuje id bmwa koji zelimo urediti
+    if (scanf("%d", &urediBMW) != 1) {              // provjera ispravnosti unosa
         printf("Neispravan unos ID-a BMW-a.\n");
         fclose(pF);
         return;
     }
 
-   
+
     int pronadeniIndex = -1;
-    BMW temp;
+    BMW temp;           // privremena struktura za pretrazivanje datoteke i izmjenu podataka
     while (fread(&temp, sizeof(BMW), 1, pF) == 1) {
         if (temp.id == urediBMW) {
-            pronadeniIndex = ftell(pF) / sizeof(BMW) - 1; 
+            pronadeniIndex = ftell(pF) / sizeof(BMW) - 1; // pozicija trazenog bmwa unutar datoteke
             break;
         }
     }
 
-    if (pronadeniIndex == -1) {
+    if (pronadeniIndex == -1) {     // zastita u slucaju da trazeni BMW nije pronadjen u datoteci
         printf("BMW s ID-om %d nije pronaden!\n", urediBMW);
         fclose(pF);
         return;
     }
 
-    printf("Uredjivanje BMW-a s ID-om %d\n", urediBMW);
+    printf("Uredjivanje BMW-a s ID-om %d\n", urediBMW);   // ponovni unos bmwa sa zastitom parametara
 
     printf("Unesite novi model (do 30 znakova, moze sadrzavati razmake):\n");
     char model[PROVJERA];
@@ -242,42 +242,42 @@ void urediBMW(const char* const imeDatoteke) {
     printf("Unesite novu cijenu:\n");
     if (scanf("%f", &temp.cijena) != 1) {
         printf("Neispravan unos. Cijena nece biti promijenjena.\n");
-        while (getchar() != '\n'); 
+        while (getchar() != '\n');
     }
 
     printf("Unesite novu potrosnju (litara na 100km):\n");
     if (scanf("%f", &temp.potrosnja) != 1) {
         printf("Neispravan unos. Potrosnja nece biti promijenjena.\n");
-        while (getchar() != '\n'); 
+        while (getchar() != '\n');
     }
 
     printf("Unesite novo ubrzanje (0-100km/h):\n");
     if (scanf("%f", &temp.ubrzanje) != 1) {
         printf("Neispravan unos. Ubrzanje nece biti promijenjeno.\n");
-        while (getchar() != '\n'); 
+        while (getchar() != '\n');
     }
 
     printf("Unesite novu snagu (HP):\n");
     if (scanf("%d", &temp.snaga) != 1) {
         printf("Neispravan unos. Snaga nece biti promijenjena.\n");
-        while (getchar() != '\n'); 
+        while (getchar() != '\n');
     }
 
     printf("Unesite novu godinu proizvodnje:\n");
     if (scanf("%d", &temp.godinaProizvodnje) != 1) {
         printf("Neispravan unos. Godina proizvodnje nece biti promijenjena.\n");
-        while (getchar() != '\n'); 
+        while (getchar() != '\n');
     }
 
     printf("Unesite novu kilometrazu:\n");
     if (scanf("%d", &temp.kilometraza) != 1) {
         printf("Neispravan unos. Kilometraza nece biti promijenjena.\n");
-        while (getchar() != '\n'); 
+        while (getchar() != '\n');
     }
 
-    
-    fseek(pF, sizeof(int) + pronadeniIndex * sizeof(BMW), SEEK_SET);
-    fwrite(&temp, sizeof(BMW), 1, pF);
+
+    fseek(pF, sizeof(int) + pronadeniIndex * sizeof(BMW), SEEK_SET);    // pokazivac se postavlja na mjesto gdje se mijenja bmw vozilo
+    fwrite(&temp, sizeof(BMW), 1, pF);                                // popunjvanje s novim informacijama o vozilu
 
     fclose(pF);
     printf("BMW s ID-om %d uspjesno uredjen!\n", urediBMW);
@@ -290,22 +290,22 @@ void obrisiBMW(const char* const imeDatoteke) {
         exit(EXIT_FAILURE);
     }
 
-    fseek(pF, sizeof(int), SEEK_SET); 
+    fseek(pF, sizeof(int), SEEK_SET);   // postavljanje pokazivaca na pocetak
 
     int obrisiBMW;
     printf("Unesite ID BMW-a koji zelite obrisati: ");
-    if (scanf("%d", &obrisiBMW) != 1) {
+    if (scanf("%d", &obrisiBMW) != 1) {         // unos ID-a za brisanje uz zastitu parametara
         printf("Neispravan unos ID-a BMW-a.\n");
         fclose(pF);
         return;
     }
 
-    
+
     int pronadeniIndex = -1;
-    BMW temp;
+    BMW temp;       // sluzi nam za pretrazivanje datoteke 
     while (fread(&temp, sizeof(BMW), 1, pF) == 1) {
         if (temp.id == obrisiBMW) {
-            pronadeniIndex = ftell(pF) / sizeof(BMW) - 1; 
+            pronadeniIndex = ftell(pF) / sizeof(BMW) - 1; // postavljanje indeksa na poziciju gdje se nalazi bmw koji zelimo obrisat
             break;
         }
     }
@@ -317,7 +317,7 @@ void obrisiBMW(const char* const imeDatoteke) {
     }
     char potvrda[PROVJERA];
     printf("Jeste li sigurni da zelite izbrisati BMW s ID-om %d? (da/ne): ", obrisiBMW);
-    if (scanf("%2s", potvrda) != 1) {
+    if (scanf("%2s", potvrda) != 1) {       // provjera korisnikovog unosa zeli li obrisati navedeni bmw
         printf("Neispravan unos. Brisanje prekinuto.\n");
         fclose(pF);
         return;
@@ -327,18 +327,18 @@ void obrisiBMW(const char* const imeDatoteke) {
         fclose(pF);
         return;
     }
-    
+
     fseek(pF, -(long)sizeof(BMW), SEEK_END);
 
-    
+
     BMW lastBMW;
     fread(&lastBMW, sizeof(BMW), 1, pF);
 
-   
+
     fseek(pF, sizeof(int) + pronadeniIndex * sizeof(BMW), SEEK_SET);
     fwrite(&lastBMW, sizeof(BMW), 1, pF);
 
-    
+
     fseek(pF, 0, SEEK_SET);
     int brojBMW;
     fread(&brojBMW, sizeof(int), 1, pF);
@@ -362,7 +362,7 @@ void sortirajBMWpoCijeniPadajuce(BMW* nizPodataka, int brojBMW) {
 
     qsort(nizPodataka, brojBMW, sizeof(BMW), usporedbaSilazno);
 
-  
+
     printf("Sortirani BMW automobili po cijeni (od najvise do najnize):\n");
     for (int i = 0; i < brojBMW; i++) {
         printf("BMW automobil %d:\n", nizPodataka[i].id);
@@ -385,10 +385,10 @@ int usporedbaUzlazno(const void* a, const void* b) {
 }
 
 void sortirajBMWpoCijeniRastuce(BMW* nizPodataka, int brojBMW) {
-    
+
     qsort(nizPodataka, brojBMW, sizeof(BMW), usporedbaUzlazno);
 
-    
+
     printf("BMW sortirannje od najnize do najvise cijene:\n");
     for (int i = 0; i < brojBMW; i++) {
         printf("BMW automobile %d:\n", nizPodataka[i].id);
@@ -411,10 +411,10 @@ int snagaUzlazno(const void* a, const void* b) {
 }
 
 void sortirajBMWpoSnaziRastuce(BMW* nizPodataka, int brojBMW) {
-    
+
     qsort(nizPodataka, brojBMW, sizeof(BMW), snagaUzlazno);
 
-    
+
     printf("BMW automobili sortirani po snazi (Uzlazno):\n");
     for (int i = 0; i < brojBMW; i++) {
         printf("BMW automobil %d:\n", nizPodataka[i].id);
@@ -450,11 +450,19 @@ void sortirajBMWpoSnaziOpadajuce(BMW* nizPodataka, int brojBMW) {
 }
 
 int izlazIzPrograma(BMW* nizPodataka) {
+    getchar();
     char potvrda[PROVJERA];
     while (1) {
         printf("Zaista zelite izaci iz programa?\n");
         printf("Upisite \"da\" ako zaista zelite izaci, inace upisite \"ne\"!\n");
-        if (scanf("%3s", potvrda) == 1) {
+
+        if (fgets(potvrda, sizeof(potvrda), stdin)) {
+
+            size_t len = strlen(potvrda);
+            if (len > 0 && potvrda[len - 1] == '\n') {
+                potvrda[len - 1] = '\0';
+            }
+
             if (strcmp("da", potvrda) == 0) {
                 free(nizPodataka);
                 nizPodataka = NULL;
@@ -463,25 +471,44 @@ int izlazIzPrograma(BMW* nizPodataka) {
             else if (strcmp("ne", potvrda) == 0) {
                 return 1;
             }
+            else {
+                printf("Neispravan unos. Molimo upisite \"da\" ili \"ne\".\n");
+            }
         }
         else {
-            printf("Neispravan unos. Molimo upisite \"da\" ili \"ne\".\n");
-            
+
             while (getchar() != '\n');
+            printf("Neispravan unos. Molimo upisite \"da\" ili \"ne\".\n");
         }
     }
-    free(nizPodataka);
-    nizPodataka = NULL;
 }
 
 void brisanjeDatoteke(const char* imeDatoteke) {
     printf("Zelite li uistinu obrisati datoteku %s?\n", imeDatoteke);
-    printf("Utipkajte \"da\" ako uistinu želite obrisati datoteku u suprotno utipkajte\
-\"ne\"!\n");
+    printf("Utipkajte \"da\" ako uistinu zelite obrisati datoteku, u suprotnom utipkajte \"ne\"!\n");
+
     char potvrda[PROVJERA] = { '\0' };
-    scanf("%2s", potvrda);
-    if (!strcmp("da", potvrda)) {
-        remove(imeDatoteke) == 0 ? printf("Uspjesno obrisana datoteka %s!\n",
-            imeDatoteke) : printf("Neuspjesno brisanje datoteke %s!\n", imeDatoteke);
+
+    if (fgets(potvrda, sizeof(potvrda), stdin)) {
+        size_t len = strlen(potvrda);
+        if (len > 0 && potvrda[len - 1] == '\n') {
+            potvrda[len - 1] = '\0';
+        }
+
+        if (strcmp("da", potvrda) == 0) {
+            if (remove(imeDatoteke) == 0) {
+                printf("Uspjesno obrisana datoteka %s!\n", imeDatoteke);
+            }
+            else {
+                printf("Neuspjesno brisanje datoteke %s!\n", imeDatoteke);
+            }
+        }
+        else if (strcmp("ne", potvrda) != 0) {
+            printf("Neispravan unos. Molimo upisite \"da\" ili \"ne\".\n");
+        }
+    }
+    else {
+        while (getchar() != '\n');
+        printf("Neispravan unos. Molimo upisite \"da\" ili \"ne\".\n");
     }
 }
