@@ -44,19 +44,24 @@ int izbornik(const char* imeDatoteke) {
 
     while (1) {
         system("cls");
-        printf("\nIzbornik:\n");
-        printf("1. Dodaj novi BMW(ADMIN)\n");
-        printf("2. Ispisi sve BMW automobile\n");
-        printf("3. Uredi BMW(ADMIN)\n");
-        printf("4. Obrisi BMW(ADMIN)\n");
-        printf("5. Obrisi DAT(ADMIN)\n");
-        printf("6. Sortiraj BMW-ove po cijeni (od najvise do najnize)\n");
-        printf("7. Sortiraj BMW-ove po cijeni (od najnize do najvise)\n");
-        printf("8. Sortiraj BMW-ove po snazi (uzlazno)\n");
-        printf("9. Sortiraj BMW-ove po snazi (silazno)\n");
-        printf("10. Izadji iz programa\n");
-
-        printf("Odabir: ");
+        printf("\t\t\t\t\t \033[0;34m ____  __  ____        __\n");
+        printf("\t\t\t\t\t\033[0;34m| __ )|  \\/  \\ \\      / /\n");
+        printf("\t\t\t\t\t\033[0;34m|  _ \\| |\\/| |\\ \\ /\\ / / \n");
+        printf("\t\t\t\t\t\033[0;34m| |_) | |  | | \\ V  V /  \n");
+        printf("\t\t\t\t\t\033[0;34m|____/|_|  |_|  \\_/\\_/   \n");
+        printf("\033[0m");  // vracanje na klasicnu boju
+        printf("\n\n\t\t\t\t\tIzbornik:\n");
+        printf("\t\t\t\t\t1. Dodaj novi BMW(ADMIN)\n");
+        printf("\t\t\t\t\t2. Ispisi sve BMW automobile\n");
+        printf("\t\t\t\t\t3. Uredi BMW(ADMIN)\n");
+        printf("\t\t\t\t\t4. Obrisi BMW(ADMIN)\n");
+        printf("\t\t\t\t\t5. Obrisi DAT(ADMIN)\n");
+        printf("\t\t\t\t\t6. Sortiraj BMW-ove po cijeni (od najvise do najnize)\n");
+        printf("\t\t\t\t\t7. Sortiraj BMW-ove po cijeni (od najnize do najvise)\n");
+        printf("\t\t\t\t\t8. Sortiraj BMW-ove po snazi (uzlazno)\n");
+        printf("\t\t\t\t\t9. Sortiraj BMW-ove po snazi (silazno)\n");
+        printf("\t\t\t\t\t10. Izadji iz programa\n");
+        printf("\t\t\t\t\tOdabir: ");
 
         if (scanf("%d", &izbor) != 1) {     // petlja provjerava da je korisnicki unos tipa int
             printf("Krivi odabir!\n");

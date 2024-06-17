@@ -97,7 +97,7 @@ void unosBMW(const char* const fileName, const BMW* nizPodataka) {
 
     validInput = false;
     while (!validInput) {
-        printf("Ubranje u sec(0-100km/h):\n ");
+        printf("Ubrzanje u sec(0-100km/h):\n ");
         if (scanf("%f", &temp.ubrzanje) == 1) {
             validInput = true;
         }
@@ -181,12 +181,12 @@ BMW* ispisBMW(const char* const imeDatoteke) {
         printf("BMW automobil %d:\n", i + 1);
         printf("ID: %d\n", nizBMW[i].id);
         printf("Model: %s\n", nizBMW[i].model);
-        printf("Cijena: %.2f\n", nizBMW[i].cijena);
-        printf("Potrosnja: %.2f\n", nizBMW[i].potrosnja);
-        printf("Ubrzanje: %.2f\n", nizBMW[i].ubrzanje);
-        printf("Snaga: %d\n", nizBMW[i].snaga);
+        printf("Cijena: %.2f $\n", nizBMW[i].cijena);
+        printf("Potrosnja: %.2f l/100km\n", nizBMW[i].potrosnja);
+        printf("Ubrzanje: %.2f s\n", nizBMW[i].ubrzanje);
+        printf("Snaga: %d hp\n", nizBMW[i].snaga);
         printf("Godina proizvodnje: %d\n", nizBMW[i].godinaProizvodnje);
-        printf("Kilometraza: %d\n\n", nizBMW[i].kilometraza);
+        printf("Kilometraza: %d km\n\n", nizBMW[i].kilometraza);
     }
 
     printf("Uspjesno ucitano!\n");
@@ -486,15 +486,16 @@ int izlazIzPrograma(BMW* nizPodataka) {
 void brisanjeDatoteke(const char* imeDatoteke) {
     printf("Zelite li uistinu obrisati datoteku %s?\n", imeDatoteke);
     printf("Utipkajte \"da\" ako uistinu zelite obrisati datoteku, u suprotnom utipkajte \"ne\"!\n");
-
+    getchar();
     char potvrda[PROVJERA] = { '\0' };
 
     if (fgets(potvrda, sizeof(potvrda), stdin)) {
+
         size_t len = strlen(potvrda);
         if (len > 0 && potvrda[len - 1] == '\n') {
             potvrda[len - 1] = '\0';
         }
-
+        getchar();
         if (strcmp("da", potvrda) == 0) {
             if (remove(imeDatoteke) == 0) {
                 printf("Uspjesno obrisana datoteka %s!\n", imeDatoteke);

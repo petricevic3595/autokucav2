@@ -12,7 +12,7 @@ int main(void) {
 
 
 	while (izbor) {
-		izbor = izbornik("BMW.bin");		// izvrsavanje izbornika dok je uvjet ispunit 
+		izbor = izbornik("BMW.bin");		// izvrsavanje izbornika dok je uvjet ispunjen
 	}
 
 	return 0;
