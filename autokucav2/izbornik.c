@@ -26,8 +26,8 @@ static bool adminLogin() {
 
 
 int izbornik(const char* imeDatoteke) {
-    BMW* nizPodataka = NULL;
-    BMW* pModel = NULL;
+    static BMW* nizPodataka = NULL;
+    static BMW* pModel = NULL;
     int izbor;
 
     nizPodataka = ispisBMW(imeDatoteke);
