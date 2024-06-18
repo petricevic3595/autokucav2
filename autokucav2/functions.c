@@ -59,7 +59,6 @@ void unosBMW(const char* const fileName, const BMW* nizPodataka) {
     BMW temp;               // inicijalizacija privremene varijable za unos BMW vozila
     temp.id = brojBMW;      // privremeni id uzima brojBMW koji se nakon svakog unosa uvecava
     printf("Unesite model (do 30 znakova):\n");
-    //pitaj matiju za zauzimanje ako treba ovdje
     char model[MODLEN];
     scanf(" %30[^\n]", model);
     if (strlen(model) <= MODLEN) {          // ako model ima vise znakova od dopustenog unos ce se ponovit
